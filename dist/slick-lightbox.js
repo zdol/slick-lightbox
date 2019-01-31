@@ -41,7 +41,7 @@
         };
         SlickLightbox.prototype.createModalItems = function () {
             /* Creates individual slides to be used with slick. If `options.images` array is specified, it uses it's contents, otherwise loops through elements' `options.itemSelector`. */
-            var $items, createItem, itemTemplate, lazyPlaceholder, length, links;
+            var $items, createItem, embedTemplate, itemTemplate, lazyPlaceholder, length, links;
             lazyPlaceholder = this.options.lazyPlaceholder || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
             itemTemplate = function (source, caption, lazy) {
                 var imgSourceParams;
@@ -51,6 +51,9 @@
                     imgSourceParams = ' src="' + source + '" ';
                 }
                 return '<div class="slick-lightbox-slick-item">\n  <div class="slick-lightbox-slick-item-inner">\n    <img class="slick-lightbox-slick-img" ' + imgSourceParams + ' />\n    ' + caption + '\n  </div>\n</div>';
+            };
+            embedTemplate = function (source, caption) {
+                return '<div class="slick-lightbox-slick-item">\n          <div class="slick-lightbox-slick-item-inner iframe">\n            <div class="slick-lightbox-slick-iframe-wrap">\n              <iframe class="slick-lightbox-slick-iframe" src="' + source + '" frameborder="0" allowfullscreen></iframe>' + caption + '\n            </div>\n          </div>\n        </div>';
             };
             if (this.options.images) {
                 links = $.map(this.options.images, function (_this) {
@@ -70,7 +73,11 @@
                         };
                         caption = _this.getElementCaption(el, info);
                         src = _this.getElementSrc(el);
-                        return itemTemplate(src, caption, _this.options.lazy);
+                        if (_this.detectImage(src)) {
+                            return itemTemplate(src, caption, _this.options.lazy);
+                        } else {
+                            return embedTemplate(src, caption);
+                        }
                     };
                 }(this);
                 links = $.map($items, createItem);
@@ -243,6 +250,10 @@
             default:
                 return el.href;
             }
+        };
+        SlickLightbox.prototype.detectImage = function (url) {
+            /* Returns true if finds image file extension */
+            return url.match(/\.(jpeg|jpg|gif|png)$/) !== null;
         };
         SlickLightbox.prototype.unbindEvents = function () {
             /* Unbinds global events. */

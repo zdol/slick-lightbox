@@ -71,17 +71,17 @@ gulp.task 'test', ['testConcat', 'base'], ->
 #############################
 
 gulp.task 'watch', ->
-  gulp.watch 'src/scripts/*.coffee', ['coffee', 'coffeedoc']
+  gulp.watch 'src/scripts/*.coffee', ['coffee']
   gulp.watch 'src/styles/*.sass', ['sass']
-  gulp.watch ['index.jade', 'README.md'], ['buildGHPages']
+  # gulp.watch ['index.jade', 'README.md'], ['buildGHPages']
 
 #############################
 
 gulp.task 'base', ->
-  gulp.start 'coffee', 'coffeedoc', 'sass', 'uglify'
+  gulp.start 'coffee', 'sass', 'uglify'
 
 gulp.task 'build', ->
-  gulp.start 'base', 'buildGHPages'
+  gulp.start 'base'
 
 gulp.task 'server', ->
   gulp.start 'base', 'watch'

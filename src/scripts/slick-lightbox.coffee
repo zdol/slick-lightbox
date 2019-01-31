@@ -63,6 +63,16 @@ class SlickLightbox
           </div>
         </div>"""
 
+    embedTemplate = (source, caption) ->
+      """
+      	<div class="slick-lightbox-slick-item">
+          <div class="slick-lightbox-slick-item-inner iframe">
+            <div class="slick-lightbox-slick-iframe-wrap">
+              <iframe class="slick-lightbox-slick-iframe" src="#{ source }" frameborder="0" allowfullscreen></iframe>#{ caption }
+            </div>
+          </div>
+        </div>"""
+
     if @options.images
       links = $.map @options.images, (img) =>
         itemTemplate(img, @options.lazy)
@@ -71,13 +81,17 @@ class SlickLightbox
       $items = @filterOutSlickClones(@$element.find(@options.itemSelector))
 
       length = $items.length
+
       createItem = (el, index) =>
         info =
           index: index
           length: length
         caption = @getElementCaption(el, info)
         src = @getElementSrc(el)
-        itemTemplate(src, caption, @options.lazy)
+        if @detectImage src
+          itemTemplate(src, caption, @options.lazy)
+        else
+          embedTemplate(src, caption)
 
       links = $.map $items, createItem
     links
@@ -210,6 +224,10 @@ class SlickLightbox
         $(el).attr(@options.src)
       else
         el.href
+
+  detectImage: (url) ->
+    ### Returns true if finds image file extension ###
+    return url.match(/\.(jpeg|jpg|gif|png)$/) != null
 
   unbindEvents: ->
     ### Unbinds global events. ###

@@ -71,6 +71,28 @@ $sl-caption-margin: 10px 0 0 !default
   vertical-align: middle
   max-width: 90%
   max-height: 90%
+  &.iframe
+    width: 70%;
+    height: 90%;
+  .slick-lightbox-slick-iframe-wrap
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform:translateY(-50%)
+    &:before
+      content: '';
+      display: block;
+      padding-top: 56.25%;
+    .slick-lightbox-slick-caption
+      position: relative;
+      top: 30px;
+    .slick-lightbox-slick-iframe
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
 
 .slick-lightbox-slick-img
   margin: 0 auto
